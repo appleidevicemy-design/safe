@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple iDevice Tracking Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --accent-color: #1d1d1f;
+      --success-color: #16a34a;
+      --warning-color: #f59e0b;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-color: #1f2937;
+      --gray-color: #9ca3af;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background: url('https://images.unsplash.com/photo-1605902711622-cfb43c4437d7?auto=format&fit=crop&w=1600&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: rgba(255,255,255,0.95);
+      text-align: center;
+      padding: 30px 20px 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      animation: fadeDown 1s ease-out;
+    }
+
+    header img {
+      height: 60px;
+      display: block;
+      margin: 0 auto 10px;
+      animation: zoomIn 1.2s ease-out;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(20px, 4vw, 32px);
+      font-weight: bold;
+      color: black;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      flex: 1;
+    }
+
+    /* Hero Section */
+    .hero-banner {
+      position: relative;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 3rem 2rem;
+      text-align: center;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
+      overflow: hidden;
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      z-index: 2;
+      padding: 20px;
+    }
+
+    .hero-content h2 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-bottom: 2.5rem;
+      color: #666;
+    }
+
+    /* Animations */
+    .delivery-truck {
+      position: absolute;
+      bottom: 50px;
+      left: -100px;
+      font-size: 2.5rem;
+      color: #1d1d1f;
+      z-index: 3;
+      animation: drive 20s linear infinite;
+    }
+
+    @keyframes drive {
+      0% { left: -100px; }
+      100% { left: calc(100% + 100px); }
+    }
+
+    .parcel {
+      position: absolute;
+      bottom: 120px;
+      right: -80px;
+      font-size: 2rem;
+      color: #1d1d1f;
+      z-index: 3;
+      animation: deliver 18s linear infinite;
+      animation-delay: 2s;
+    }
+
+    @keyframes deliver {
+      0% { right: -80px; }
+      100% { right: calc(100% + 80px); }
+    }
+
+    .gps-icon {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.8rem;
+      color: #1d1d1f;
+      opacity: 0.7;
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { transform: translateX(-50%) scale(1); opacity: 0.7; }
+      50% { transform: translateX(-50%) scale(1.1); opacity: 1; }
+    }
+
+    .circle {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f5f5f7 0%, #fff 100%);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      opacity: 0.6;
+    }
+
+    /* Tracking Form */
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .search-box button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 15px 25px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+      font-weight: 500;
+    }
+
+    .search-box button:hover {
+      background: #1e4fd1;
+      transform: translateY(-2px);
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: auto;
+    }
+
+    /* Results Section */
+    .info-card {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      animation: fadeUp 0.6s ease-in;
+    }
+
+    .info-label { 
+      font-weight: bold;
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+    
+    .info-value {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+    }
+    
+    .status-badge {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      display: inline-block;
+      background: #e6f2ff;
+      color: var(--primary-color);
+    }
+
+    /* Timeline */
+    .timeline {
+      margin-top: 30px;
+      position: relative;
+      padding-left: 40px;
+    }
+    
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 20px;
+      width: 2px;
+      height: 100%;
+      background: var(--gray-color);
+    }
+    
+    .timeline-event {
+      position: relative;
+      margin-bottom: 40px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      animation: fadeUp 0.5s ease-in;
+    }
+    
+    .timeline-event::before {
+      content: "";
+      position: absolute;
+      top: 20px;
+      left: -26px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--gray-color);
+      background: white;
+      z-index: 2;
+    }
+    
+    .timeline-event.active::before {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .timeline-event::after {
+      content: "↓";
+      position: absolute;
+      left: -20px;
+      bottom: -30px;
+      font-size: 18px;
+      color: var(--gray-color);
+    }
+    
+    .timeline-event:last-child::after {
+      content: "";
+    }
+    
+    .event-time {
+      font-size: 0.9rem;
+      color: var(--gray-color);
+      margin-bottom: 5px;
+    }
+    
+    .event-status {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+    
+    .event-location {
+      font-size: 0.95rem;
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(255,255,255,0.95);
+      padding: 30px 20px;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.6;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+      margin-top: 40px;
+    }
+    
+    footer h3 {
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+    }
+    
+    footer p {
+      max-width: 800px;
+      margin: 0 auto 15px;
+    }
+
+    /* Back button - changed from red to black */
+    #backBtn {
+      display: none;
+      margin: 20px auto;
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+    
+    #backBtn:hover {
+      background: #333;
+      transform: translateY(-2px);
+    }
+
+    /* Animations */
+    @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-content h2 {
+        font-size: 2rem;
+      }
+      
+      .hero-content p {
+        font-size: 1rem;
+      }
+      
+      .search-box {
+        flex-direction: column;
+      }
+      
+      .delivery-truck, .parcel {
+        font-size: 2rem;
+      }
+      
+      .gps-icon {
+        top: 60px;
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-content h2 {
+        font-size: 1.8rem;
+      }
+      
+      .hero-content p {
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
+      }
+      
+      .delivery-truck, .parcel {
+        font-size: 1.8rem;
+      }
+      
+      .gps-icon {
+        top: 50px;
+        font-size: 1.3rem;
+      }
+      
+      .timeline {
+        padding-left: 30px;
+      }
+      
+      .timeline-event::before {
+        left: -20px;
+      }
+      
+      .timeline-event::after {
+        left: -15px;
+      }
+      
+      header {
+        padding: 20px 15px 15px;
+      }
+      
+      header img {
+        height: 50px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .hero-content h2 {
+        font-size: 1.6rem;
+      }
+      
+      .hero-content p {
+        font-size: 0.85rem;
+      }
+      
+      .delivery-truck, .parcel {
+        font-size: 1.5rem;
+      }
+      
+      .gps-icon {
+        top: 40px;
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Logo">
+    <h1>Apple iDevice Tracking Portal</h1>
+  </header>
+  
+  <div class="container">
+    <section class="hero-banner">
+      <div class="gps-icon"><i class="fas fa-map-marker-alt"></i></div>
+      <div class="delivery-truck"><i class="fas fa-truck"></i></div>
+      <div class="parcel"><i class="fas fa-box-open"></i></div>
+
+      <div class="hero-content">
+        <h2>Track Your Apple Delivery</h2>
+        <p>With convenient delivery methods, we're making it easier and safer to shop at Apple.</p>
+      </div>
+    </section>
+
+    <div class="search-box">
+      <input type="text" id="trackingInput" placeholder="Enter tracking number">
+      <button onclick="trackParcel()">Track</button>
+    </div>
+    
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>Fetching latest updates...</p>
+    </div>
+    
+    <div id="trackingInfo"></div>
+    <div id="timeline" class="timeline"></div>
+    <button id="backBtn" onclick="goBack()">⬅ Back</button>
+  </div>
+
+  <footer>
+    <h3>AppleCare+ Protection</h3>
+    <p>
+      AppleCare+ provides extended coverage for your Apple device, including up to two incidents of
+      accidental damage protection every 12 months. Each incident is subject to a service fee, but
+      it saves you from the high cost of repairs. It also includes priority access to Apple experts
+      via chat or phone, and genuine Apple parts are always used for repairs.
+    </p>
+    <p>
+      By protecting your iPhone, iPad, or Mac with AppleCare+, you ensure your device stays reliable,
+      secure, and covered against unexpected mishaps.
+    </p>
+  </footer>
+
+  <script>
+    // Decorative circles for background
+    document.addEventListener('DOMContentLoaded', function(){
+      const banner = document.querySelector('.hero-banner');
+      for(let i = 0; i < 8; i++){
+        const circle = document.createElement('div');
+        circle.classList.add('circle');
+        const size = Math.random() * 120 + 30;
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        circle.style.width = `${size}px`;
+        circle.style.height = `${size}px`;
+        circle.style.left = `${posX}%`;
+        circle.style.top = `${posY}%`;
+        banner.appendChild(circle);
+      }
+    });
+
+    let trackingData = {};
+
+    // Function to load tracking data from external JSON file
+    async function loadTrackingData() {
+      try {
+        const response = await fetch('data.json');
+        if (!response.ok) {
+          throw new Error('Failed to load tracking data');
+        }
+        trackingData = await response.json();
+        console.log('Tracking data loaded successfully');
+      } catch (error) {
+        console.error('Error loading tracking data:', error);
+        // Fallback to demo data if external file fails to load
+        trackingData = {
+          "7287654321098765": {
+            "recipietname": "Nur Azmina",
+            "destination": "Parcel Kiosk 12, Cafe Serumpun, UPM, 43400, Serdang, Selangor.",
+            "courier": "myDHL Express",
+            "parcelitem": "Apple iPad 11",
+            "parcelid": "56521563098",
+            "trackingnumber": "7287654321098765",
+            "events": [
+              {"timestamp":"2025-08-27T15:36:22Z","status":"Arrived at toll facility - Awaiting clearance","location":"Sungai Hub 1"},
+              {"timestamp":"2025-08-27T17:15:26Z","status":"Cleared for Destination Sorting Hub","location":"Sungai 1"},
+              {"timestamp":"2025-08-29T13:13:15Z","status":"Departed from facility","location":"Sungai Hub"},
+              {"timestamp":"2025-08-29T22:36:13Z","status":"Parcel on hold - Mechanical fault","location":"Jalan Tun Abdul Razak"},
+              {"timestamp":"2025-08-31T08:40:31Z","status":"Dynamic re-routing","location":"Jalan PM 6, Melaka"}
+            ]
+          }
+        };
+      }
+    }
+
+    const trackingInfo = document.getElementById("trackingInfo");
+    const timeline = document.getElementById("timeline");
+    const loading = document.getElementById("loading");
+    const backBtn = document.getElementById("backBtn");
+
+    // Load tracking data when page loads
+    loadTrackingData();
+
+    function trackParcel() {
+      const input = document.getElementById("trackingInput").value.trim();
+      trackingInfo.innerHTML = "";
+      timeline.innerHTML = "";
+      if (!input) return;
+
+      loading.style.display = "block";
+
+      setTimeout(() => {
+        loading.style.display = "none";
+        const userData = trackingData[input];
+        if (!userData) {
+          trackingInfo.innerHTML = `<div class="info-card"><p style="color:red; text-align:center;">❌ Tracking number not found</p></div>`;
+          return;
+        }
+        displayTrackingInfo(userData);
+        backBtn.style.display = "block";
+      }, 1200);
+    }
+
+    function displayTrackingInfo(userData) {
+      const sortedEvents = [...userData.events].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      const latestEvent = sortedEvents[0];
+      const latestStatus = latestEvent.status;
+
+      trackingInfo.innerHTML = `
+        <div class="info-card">
+          <div class="info-label">Recipient</div>
+          <div class="info-value">${userData.recipietname}</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Destination</div>
+          <div class="info-value">${userData.destination}</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Courier</div>
+          <div class="info-value">${userData.courier}</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Item</div>
+          <div class="info-value">${userData.parcelitem}</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Parcel ID</div>
+          <div class="info-value">${userData.parcelid}</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Tracking Number</div>
+          <div class="info-value"><b>${userData.trackingnumber}</b></div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Current Status</div>
+          <div class="status-badge">${latestStatus}</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Last Updated</div>
+          <div class="info-value">${new Date(latestEvent.timestamp).toLocaleString()}</div>
+        </div>
+      `;
+
+      timeline.innerHTML = '';
+      sortedEvents.forEach((event, index) => {
+        const eventDiv = document.createElement("div");
+        let eventClass = "timeline-event";
+        if (index === 0) eventClass += " active";
+        eventDiv.className = eventClass;
+        eventDiv.innerHTML = `
+          <div class="event-time">${new Date(event.timestamp).toLocaleString()}</div>
+          <div class="event-status">${event.status}</div>
+          <div class="event-location">${event.location}</div>
+        `;
+        timeline.appendChild(eventDiv);
+      });
+    }
+
+    function goBack() {
+      trackingInfo.innerHTML = "";
+      timeline.innerHTML = "";
+      backBtn.style.display = "none";
+      document.getElementById("trackingInput").value = "";
+    }
+  </script>
+</body>
+</html>
