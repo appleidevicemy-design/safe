@@ -7,12 +7,36 @@
     "parcelid": "56521563098",
     "trackingnumber": "7287654321098765",
     "events": [
-      {"timestamp":"2025-08-27T15:36:22Z","status":"Arrived at toll facility - Awaiting clearance","location":"Sungai Hub 1"},
-      {"timestamp":"2025-08-27T17:15:26Z","status":"Cleared for Destination Sorting Hub","location":"Sungai 1"},
-      {"timestamp":"2025-08-29T13:13:15Z","status":"Departed from facility","location":"Sungai Hub"},
-      {"timestamp":"2025-08-29T22:36:13Z","status":"Parcel on hold - Mechanical fault","location":"Jalan Tun Abdul Razak"},
-      {"timestamp":"2025-08-31T08:40:31Z","status":"Dynamic re-routing","location":"Jalan PM 6, Melaka"}
-      {"timestamp":"2025-09-12T07:52:00Z","status": "Refused by Recipient","location": "Selangor Gateway"}
+      {
+        "timestamp": "2025-08-27T15:36:22Z",
+        "status": "Arrived at toll facility - Awaiting clearance",
+        "location": "Sungai Hub 1"
+      },
+      {
+        "timestamp": "2025-08-27T17:15:26Z",
+        "status": "Cleared for Destination Sorting Hub",
+        "location": "Sungai 1"
+      },
+      {
+        "timestamp": "2025-08-29T13:13:15Z",
+        "status": "Departed from facility",
+        "location": "Sungai Hub"
+      },
+      {
+        "timestamp": "2025-08-29T22:36:13Z",
+        "status": "Parcel on hold - Mechanical fault",
+        "location": "Jalan Tun Abdul Razak"
+      },
+      {
+        "timestamp": "2025-08-31T08:40:31Z",
+        "status": "Dynamic re-routing",
+        "location": "Jalan PM 6, Melaka"
+      },
+      {
+        "timestamp": "2025-09-12T07:52:00Z",
+        "status": "Refused by Recipient",
+        "location": "Selangor Gateway"
+      }
     ]
   },
   "600788993515162": {
@@ -23,11 +47,31 @@
     "parcelid": "821983515162063366",
     "trackingnumber": "600788993515162",
     "events": [
-      {"timestamp":"2025-08-26T22:36:13Z","status":"Parcel on hold - Mechanical fault","location":"Shah Alam"},
-      {"timestamp":"2025-08-29T13:13:15Z","status":"Awaiting Clearance - BOE Facility","location":"Shah Alam"},
-      {"timestamp":"2025-08-30T10:15:26Z","status":"Cleared for Destination Sorting Hub","location":"Sungai 1"},
-      {"timestamp":"2025-09-09T17:36:22Z","status":"On Transit - Arrived at facility","location":"Sungai Tollway"}
-      {"timestamp":"2025-09-12T07:52:00Z","status": "Refused by Recipient","location": "Selangor Gateway"}
+      {
+        "timestamp": "2025-08-26T22:36:13Z",
+        "status": "Parcel on hold - Mechanical fault",
+        "location": "Shah Alam"
+      },
+      {
+        "timestamp": "2025-08-29T13:13:15Z",
+        "status": "Awaiting Clearance - BOE Facility",
+        "location": "Shah Alam"
+      },
+      {
+        "timestamp": "2025-08-30T10:15:26Z",
+        "status": "Cleared for Destination Sorting Hub",
+        "location": "Sungai 1"
+      },
+      {
+        "timestamp": "2025-09-09T17:36:22Z",
+        "status": "On Transit - Arrived at facility",
+        "location": "Sungai Tollway"
+      },
+      {
+        "timestamp": "2025-09-12T07:52:00Z",
+        "status": "Refused by Recipient",
+        "location": "Selangor Gateway"
+      }
     ]
   }
 }
